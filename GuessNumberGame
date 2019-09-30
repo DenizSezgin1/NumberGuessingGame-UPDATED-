@@ -1,0 +1,123 @@
+import random
+import time
+import sys
+
+
+digits=set(range(10))
+firstDigit=random.randint(1,9)
+last_3=random.sample(digits-{firstDigit},3)
+computerNumber=str(firstDigit) + ''.join(map(str,last_3)) #Bilgisayarın tuttuğu sayı.
+
+digits1=set(range(10))
+firstDigit1=random.randint(1,9)
+last_31=random.sample(digits1-{firstDigit1},3)
+computersGuess=str(firstDigit1) + ''.join(map(str,last_31)) #Bilgisayarın tahmini
+
+
+
+
+x=[int(i) for i in str(computerNumber)]  #Ürettiğim random sayıyı basamaklarına ayırabilmek için kullandım.
+y=[int(k) for k in str(computersGuess)]
+print(x)
+print("Hello, what is your name ?")
+name=input("Enter your name:")
+time.sleep(1)  #Komutlar uygulanmadan önce 1 saniyelik delay oluşturur.
+print("\nOkay, " + name)
+time.sleep(1)
+s="""\nThis is a number guessing game, you and computer will pick a 4-digit number between 1000 to 9999, one by one you will try to find each others number."""
+print(s)
+time.sleep(1)
+print("\nInstructions:\n")
+time.sleep(1)
+print("User will enter a four digit number for guessing computer's number.\n"
+      "According to this number computer is going to give hints to user.\n"
+      "When computer guessing your number, it is going to ask for a 4-digit number, digit by digit.\n"
+      "According to this number, you will give hints to computer digit by digit.\n"
+      "You will type 1 if that digit is true or type 2 if that digit is wrong. If the number is true type Y.\n"
+      "Game will end when a correct guess is made.")
+time.sleep(1)
+print("\nUser will guess first.\n")
+
+def humanGuess():  #humanGuess() adında bir fonksiyon oluşturdum.
+
+    toplamSonuc=0
+
+    guess1=input("[User Guessing]Enter Your Guess(4-digit):")  #Kullanıcıdan tahmin için 4 basamaklı sayı isteniyor.
+    b=[int(t) for t in str(guess1)]  #Bizim tahmin yapmak için girdiğimiz sayıyı basamaklarına ayırır.
+
+    if b==x:  #b==x bizim girdiğimiz sayıyla bilgisayarın sayısının aynı olma durumu.
+        sys.exit("You found computer's number.")
+        # sys.exit() komutu, içine yazdığım yorumu ekranda gösterip programdan çıkış yapmamı sağlıyor.
+
+    if len(b) != len(x):  #b != x bizim girdiğimiz sayının basamak sayısıyla bilgisayarın tuttuğu sayının basamak sayısının aynı olmama durumu.
+
+        sys.exit("Error: You must enter a 4-digit number. Play again.")
+
+
+
+    if b[0] == x[0]:  #b[0] ve x[0]ile belirtilen ilk basamak değerlerinin aynı olma durumu.
+        toplamSonuc=toplamSonuc+1
+    elif b[0] in x:  #Eğer b[0] yani ilk basamak değeri bilgisayarın tuttuğu sayının içinde varsa durumu.
+        toplamSonuc=toplamSonuc+(-1)
+    else:
+        toplamSonuc = toplamSonuc + 0
+
+    if b[1] == x[1]:  #b[1] ve x[1] 2. basamaklar.
+        toplamSonuc = toplamSonuc + 1
+    elif b[1] in x:
+        toplamSonuc = toplamSonuc + (-1)
+    else:
+        toplamSonuc = toplamSonuc + 0
+
+    if b[2] == x[2]:  #b[2] ve x[2] 3. basamaklar.
+        toplamSonuc = toplamSonuc + 1
+    elif b[2] in x:
+        toplamSonuc = toplamSonuc + (-1)
+    else:
+        toplamSonuc = toplamSonuc + 0
+
+    if b[3] == x[3]:  #b[3] ve x[3] 4. yani son basamaklar.
+        toplamSonuc = toplamSonuc + 1
+    elif b[3] in x:
+        toplamSonuc = toplamSonuc + (-1)
+    else:
+        toplamSonuc=toplamSonuc+0
+
+    return toplamSonuc
+
+
+def computerGuess():  #computerGuess adında bir fonksiyon oluşturdum.
+
+    for n in range(0,4):  #n=0,1,2,3 #değerleri için sırayla for döngüsü içinde n olan yerlere 0,1,2,3 değerlerini atıyor.
+        print("[Computer Guessing]Is this your number {}? Else, ".format(y))
+        print("Give hint to computer for {}.".format(y[n]))
+        guess2=input()  #Kullanıcıdan bilgisayara ipucu vermek için input isteniyor.
+
+        if guess2 == "1":
+            y[n]=y[n]
+
+        elif guess2 == "2":
+            y[n]=random.randint(1,9)  #Basamak değerinin yanlış olduğunu belirtmek için 2 değerini giriyoruz ve o basamak değerini 1-9 arasında değiştiriyor.
+
+        elif guess2 == "Y":
+            sys.exit("Computer found your number.")
+
+        else:
+            sys.exit("Error: Wrong response. Play again.")
+
+        print(y)
+        print("\n")
+
+
+
+while True:  #Oluşturduğum fonksiyonları ilk tahmini kullanıcı yapıcak şekilde sırayla çalıştırıyor.
+    sonuc = (int)(humanGuess())
+    print("\nHint: \n")
+    print (sonuc)
+    print("\nComputer's turn.\n")
+    computerGuess()
+
+
+
+
+
